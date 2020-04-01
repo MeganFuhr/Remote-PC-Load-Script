@@ -155,13 +155,13 @@ In this section we will describe the script in more technical detail.  The logic
     b. Then we get the desktop by name using
 
     ```powershell
-    $GetDesktop = Get-BrokerPrivateDesktop $Machine -AdminAddress $adminiAddress
+    $GetDesktop = Get-BrokerMachine $Machine -AdminAddress $adminAddress
     ```
 
     c. Then user assignment is checked
 
     ```powershell
-    $GetAssignedUser = Get-BrokerUser -AdminAddress $adminiAddress -PrivateDesktopUid $GetDesktop.Uid
+    $GetAssignedUser = Get-BrokerUser -AdminAddress $adminAddress -MachineUID $GetDesktop.uid
     ```
 
     d. If no user is assigned, then the user is assigned using $AllowMultipleUsers is $true
@@ -171,7 +171,7 @@ In this section we will describe the script in more technical detail.  The logic
     f. Then the current user is checked against the array.  If they are not present, they will be added using
 
     ```powershell
-    Add-BrokerUser -AdminAddress $adminiAddress -PrivateDesktop $Machine -Name $UserName
+    Add-BrokerUser -AdminAddress $adminAddress -Machine $Machine -Name $UserName
     ```
 
     g. If **$AllowMultipleUsers** is not set to $true and there was an assigned user this is logged but the new user assignment is not executed. Also in this case If a user is already assigned a log entry is made and the line is skipped.
@@ -185,10 +185,10 @@ In this section we will describe the script in more technical detail.  The logic
     b. We then get the desktop information using
 
     ```powershell
-    $GetDesktop = Get-BrokerPrivateDesktop $Machine -AdminAddress $adminiAddress -ErrorAction:SilentlyContinue
+    $GetDesktop = Get-BrokerMachine $Machine -AdminAddress $adminAddress -ErrorAction:SilentlyContinue
     ```
 
-    c. If Get-BrokerPrivateDesktop fails, we write to the log and add this machine to our output string
+    c. If Get-BrokerMachine fails, we write to the log and add this machine to our output string
 
     d. After all desktops have been checked any missing desktops are written into a csv file named MissingVDAs.csv in the log folder
 
@@ -199,15 +199,15 @@ In this section we will describe the script in more technical detail.  The logic
     b. We then get the desktop information using
 
     ```powershell
-    $GetDesktop = Get-BrokerPrivateDesktop $Machine -AdminAddress $adminiAddress -ErrorAction:SilentlyContinue
+    $GetDesktop = Get-BrokerMachine $Machine -AdminAddress $adminAddress -ErrorAction:SilentlyContinue
     ```
 
-    c. If Get-BrokerPrivateDesktop fails, we write to the log and add this user to our output string
+    c. If Get-BrokerMachine fails, we write to the log and add this user to our output string
 
     d. If the machine is found, the script will then get assigned users using
 
     ```powershell
-    $GetAssignedUser = Get-BrokerUser -AdminAddress $adminiAddress -PrivateDesktopUid $GetDesktop.Uid
+    $GetAssignedUser = Get-BrokerUser -AdminAddress $adminAddress -MachineUID $GetDesktop.Uid
     ```
 
     e. If no user is assigned the user will be added to the missing list
